@@ -851,3 +851,67 @@ Two schedules are view-equivalent if they produce the same results regardless of
 **Recoverable Schedule**
 
 Schedules in which transactions commit only after all transactions whose changes they read commit are called recoverable schedules.
+
+**Cascading Schedule**
+
+When there is a failure in one transaction and this leads to the rolling back or aborting other dependent transactions, then such scheduling is referred to as Cascading rollback or cascading abort
+
+**Cascadeless Schedule**
+
+Schedules in which transactions read values only after all transactions whose changes they are going to read commit are called cascadeless schedules.
+
+**Lock-Based Protocol**
+
+In this type of protocol, any transaction cannot read or write data until it acquires an appropriate lock on it.
+
+1. **Shared lock**
+
+- In a shared lock, the data item can only read by the transaction.
+
+- It can be shared between the transactions because when the transaction holds a lock, then it can't update the data on the data item.
+
+2. **Exclusive lock**
+
+- In the exclusive lock, the data item can be both reads as well as written by the transaction.
+
+- This lock is exclusive, and in this lock, multiple transactions do not modify the same data simultaneously.
+
+**Simplistic lock protocol**
+
+It is the simplest way of locking the data while transaction. Simplistic lock-based protocols allow all the transactions to get the lock on the data before insert or delete or update on it. It will unlock the data item after completing the transaction.
+
+**Pre-claiming Lock Protocol**
+
+- Pre-claiming Lock Protocols evaluate the transaction to list all the data items on which they need locks.
+
+- Before initiating an execution of the transaction, it requests DBMS for all the lock on all those data items.
+
+- If all the locks are granted then this protocol allows the transaction to begin. When the transaction is completed then it releases all the lock.
+
+- If all the locks are not granted then this protocol allows the transaction to rolls back and waits until all the locks are granted.
+
+**Two-phase locking (2PL)**
+
+- The two-phase locking protocol divides the execution phase of the transaction into three parts.
+
+- In the first part, when the execution of the transaction starts, it seeks permission for the lock it requires.
+
+- In the second part, the transaction acquires all the locks. The third phase is started as soon as the transaction releases its first lock.
+
+- In the third phase, the transaction cannot demand any new locks. It only releases the acquired locks.
+
+There are two phases of 2PL:
+
+**Growing phase**: In the growing phase, a new lock on the data item may be acquired by the transaction, but none can be released.
+
+**Shrinking phase**: In the shrinking phase, existing lock held by the transaction may be released, but no new locks can be acquired.
+
+**Strict Two-phase locking (Strict-2PL)**
+
+- The first phase of Strict-2PL is similar to 2PL. In the first phase, after acquiring all the locks, the transaction continues to execute normally.
+
+- The only difference between 2PL and strict 2PL is that Strict-2PL does not release a lock after using it.
+
+- Strict-2PL waits until the whole transaction to commit, and then it releases all the locks at a time.
+
+- Strict-2PL protocol does not have shrinking phase of lock release.
