@@ -92,7 +92,6 @@ Integrity constraints are pre-defined set of rules that are applied on the table
 
 - The entity integrity constraint states that primary key value can't be null.
 
-- The entity integrity constraint states that primary key value can't be null.
 
 **Referential Integrity Constraints**
 
@@ -361,6 +360,38 @@ dependency contains exactly one attribute on its right side.
 ![Alt text](<Screenshot 2023-09-18 034738.png>)
 
 ![Alt text](<Screenshot 2023-09-18 034643.png>)
+
+
+**Decomposition in DBMS**
+
+Decomposition in Database Management System is to break a relation into multiple relations to bring it into an appropriate normal form. It helps to remove redundancy, inconsistencies, and anomalies from a database. The decomposition of a relation R in a relational schema is the process of replacing the original relation R with two or more relations in a relational schema. Each of these relations contains a subset of the attributes of R and together they include all attributes of R.
+
+**Lossless Join Decomposition**
+
+A lossless Join decomposition ensures two things:
+
+- No information is lost while decomposing from the original relation.
+
+- If we join back the sub decomposed relations, the same relation that was decomposed is obtained.
+
+We can follow certain rules to ensure that the decomposition is a lossless join decomposition Let’s say we have a relation R and we decomposed it into R1 and R2, then the rules are:
+
+1. The union of attributes of both the sub relations R1 and R2 must contain all the attributes of original relation R.
+
+R1 ∪ R2 = R
+
+2. The intersection of attributes of both the sub relations R1 and R2 must not be null, i.e., there should be some attributes that are present in both R1 and R2.
+
+R1 ∩ R2 ≠ ∅
+
+3. The intersection of attributes of both the sub relations R1 and R2 must be the superkey of R1 or R2, or both R1 and R2.
+
+R1 ∩ R2 = Super key of R1 or 
+
+
+**Dependency Preserving**
+
+It says that after decomposing a relation R into R1 and R2, all dependencies of the original relation R must be present either in R1 or R2 or they must be derivable using the combination of functional dependencies present in R1 and R2.
 
 ## SQL Queries
 
@@ -767,6 +798,224 @@ Restriction on GOTO statement
 - Cannot transfer control into an exception handler.
 
 
+**PL/SQL Procedure**
+
+It is a PL/SQL block which performs one or more specific tasks.
+
+- Header: The header contains the name of the procedure and the parameters or variables passed to the procedure.
+
+- Body: The body contains a declaration section, execution section and exception section similar to a general PL/SQL block.
+
+**PL/SQL Create Procedure**
+
+```
+CREATE [OR REPLACE] PROCEDURE procedure_name 
+[(parameter_name [IN | OUT | IN OUT] type [, ...])] 
+{IS | AS} 
+BEGIN 
+  < procedure_body > 
+END procedure_name; 
+```
+
+**How to pass parameters in procedure:**
+
+![Alt text](<Screenshot 2023-10-03 204322.png>)
+
+
+**PL/SQL program to call procedure**
+
+```
+BEGIN 
+   procedure(); 
+END; 
+/
+
+```
+
+Methods for Passing Parameters
+Actual parameters can be passed in three ways −
+
+- Positional notation e.g..,(findMin(a, b, c, d))
+- Named notation e.g..,  findMin(x => a, y => b, z => c, m => d)
+- Mixed notation e.g.., findMin(x => a, b, c, d)
+
+
+```
+
+-- Create the "orders" table
+-- CREATE TABLE orders (
+--     order_id NUMBER PRIMARY KEY,
+--     amount NUMBER,
+--     customer_id NUMBER,
+--     item VARCHAR2(255)
+-- );
+
+-- -- Insert values into the "orders" table
+-- INSERT INTO orders (order_id, amount, customer_id, item)
+-- VALUES
+--     (1, 500.00, 101, 'Widget'),
+--     (2, 750.50, 102, 'Gadget'),
+--     (3, 300.25, 103, 'Doodad'),
+--     (4, 1000.75, 104, 'Thingamajig');
+
+-- create or replace procedure insrt(id in number, x in number,customer in number,commodity in varchar2)
+-- as
+-- begin
+
+-- insert into orders(order_id, amount, customer_id, item)
+-- values(id,x,customer,commodity);
+-- end;
+-- /
+-- begin
+-- insrt(10,45000,2234,'dheeraj');
+-- end;
+-- /
+
+-- create or replace procedure fresh(id in number,commodity in varchar2)
+-- as
+-- begin
+
+-- UPDATE orders
+-- SET item = commodity
+-- WHERE customer_id = id;
+
+-- end;
+-- /
+-- begin
+-- fresh(10,'fridge');
+-- end;
+-- /
+
+
+-- create or replace procedure remove(id in number)
+-- as
+-- begin
+
+-- delete from orders
+-- WHERE customer_id = id;
+
+-- end;
+-- /
+-- begin
+-- remove(10);
+-- end;
+-- /
+
+-- declare 
+--  total number;
+-- begin
+-- update orders
+-- set amount=amount+500.00;
+-- IF sql%notfound THEN 
+--       dbms_output.put_line('no order selected'); 
+--    ELSIF sql%found THEN 
+--       total := sql%rowcount;
+--       dbms_output.put_line( total || ' customers selected '); 
+--    END IF;  
+-- END; 
+-- /      
+
+-- DECLARE
+--    o_id orders.order_id%type;
+--    o_amount orders.amount%type;
+--    c_id orders.customer_id%type;
+
+--    cursor new_cursor is
+--       SELECT order_id, amount, customer_id FROM orders;
+
+-- BEGIN
+--    OPEN new_cursor;
+--    LOOP
+--       FETCH new_cursor INTO o_id, o_amount, c_id;
+--       EXIT WHEN new_cursor%notfound;
+--       DBMS_OUTPUT.PUT_LINE(o_id || ' ' || o_amount || ' ' || c_id);
+--    END LOOP;
+--    CLOSE new_cursor;
+-- END;
+-- /
+
+-- create or replace trigger new_trigger
+-- before insert or update or delete on orders
+-- for each row
+-- when(NEW.order_id>0)
+
+-- declare
+
+-- amount_diff number;
+-- begin
+
+-- amount_diff := :NEW.amount  - :OLD.amount;
+-- dbms_output.put_line('Old : ' || :OLD.amount); 
+--    dbms_output.put_line('New : ' || :NEW.amount); 
+--    dbms_output.put_line(' difference: ' || amount_diff); 
+-- END; 
+-- / 
+
+-- insert into orders(order_id, amount, customer_id, item)
+-- values(1,9800,1234,'laptop');
+
+-- update orders
+-- set amount=amount+200
+-- where order_id=1;
+
+
+-- Create Package Specification
+CREATE OR REPLACE PACKAGE c_package AS
+   -- Procedure to insert a new order
+   PROCEDURE insrt(id IN NUMBER, x IN NUMBER, customer IN NUMBER, commodity IN VARCHAR2);
+
+   -- Procedure to remove orders for a customer
+   PROCEDURE remove(id IN NUMBER);
+
+   -- Procedure to display orders using a cursor
+   PROCEDURE display_orders;
+END c_package;
+/
+
+-- Create Package Body
+CREATE OR REPLACE PACKAGE BODY c_package AS
+   -- Procedure to insert a new order
+   PROCEDURE insrt(id IN NUMBER, x IN NUMBER, customer IN NUMBER, commodity IN VARCHAR2) IS
+   BEGIN
+      INSERT INTO orders(order_id, amount, customer_id, item)
+      VALUES(id, x, customer, commodity);
+   END insrt;
+
+   -- Procedure to remove orders for a customer
+   PROCEDURE remove(id IN NUMBER) IS
+   BEGIN
+      DELETE FROM orders
+      WHERE customer_id = id;
+   END remove;
+
+   -- Procedure to display orders using a cursor
+   PROCEDURE display_orders IS
+      o_id orders.order_id%TYPE;
+      o_amount orders.amount%TYPE;
+      c_id orders.customer_id%TYPE;
+
+      CURSOR new_cursor IS
+         SELECT order_id, amount, customer_id FROM orders;
+
+   BEGIN
+      OPEN new_cursor;
+      LOOP
+         FETCH new_cursor INTO o_id, o_amount, c_id;
+         EXIT WHEN new_cursor%NOTFOUND;
+         DBMS_OUTPUT.PUT_LINE(o_id || ' ' || o_amount || ' ' || c_id);
+      END LOOP;
+      CLOSE new_cursor;
+   END display_orders;
+END c_package;
+/
+BEGIN
+   c_package.insrt(2, 45643, 321, 'harry');
+   c_package.display_orders;
+END;
+/
+
+
+```
 
 ## Transaction
 
@@ -839,7 +1088,7 @@ The serial schedule S’ can be found by **Topological Sorting** of the acyclic 
 Step 1. Look for vertices with indegree 0.Pick it.
 Step 2. Remove that vertices and then repeat the step 1.
 
-![Alt text](Transaction_state.png)
+![Alt text](<Screenshot 2023-09-21 180156.png>)
 
 **View-equivalent**
 
@@ -915,3 +1164,66 @@ There are two phases of 2PL:
 - Strict-2PL waits until the whole transaction to commit, and then it releases all the locks at a time.
 
 - Strict-2PL protocol does not have shrinking phase of lock release.
+
+
+
+### Database Recover
+
+Database Systems are subject to failures but the data stored in them must be available as and when required for fast recovery. It must also have atomicity
+
+There are different **types of errors** that can occur in DBMS12345. These include:
+
+- Logical errors: where a transaction cannot complete because it has some code error or any internal error condition135.
+
+- System errors: where the database system itself terminates an active transaction because the DBMS is not able to execute it, or it has to stop because of some system condition15.
+
+- Insertion anomalies: where inserting data into a table creates inconsistencies or redundancies2.
+
+- Deletion anomalies: where deleting data from a table creates inconsistencies or redundancies2.
+
+- Update anomalies: where updating data in a table creates inconsistencies or redundancies2.
+
+
+**Types of Recovery Techniques in DBMS**
+
+
+What is a Log-Based Recovery?
+
+Any DBMS has its own system logs that have the records for all the activity that has occurred in the system along with timestamps on the time of the activity. Databases handle different log files for activities like errors, queries, and other changes in the database. The log is stored in the files in the following formats,
+
+- The structure [start_transaction, T] denotes the start of execution of transaction T.
+
+- [write_item, T, X, old_value, new_value] shows that the value of the variable, X is changed from old_value to new_value by the transaction T.
+
+- [read_item, T, X] represents that the value of X is read by the transaction T.
+
+- [commit, T] indicates the changes in the data are stored in the database through a commit and can't be further modified by the transaction. There will be no error after a commit has been made to the database.
+
+- [abort, T] is used to show that the transaction, T is aborted.
+
+**Rollback/Undo Recovery Technique**
+
+- This technique is accomplished by undoing the changes made by the transaction using the log records stored in the transaction log.
+
+- The transaction log contains a record of all the transactions that have been performed on the database. The system uses the log records to undo the changes made by the failed transaction and restore the database to its previous state.
+
+**Commit/Redo Recovery Technique**
+
+- The commit/redo recovery technique is based on the principle of reapplying the changes made by a transaction that has been completed successfully to the database.
+
+- This technique is accomplished by using the log records stored in the transaction log to redo the changes made by the transaction that was in progress at the time of the failure or error. The system uses the log records to reapply the changes made by the transaction and restore the database to its most recent consistent state.
+
+**Checkpoint Recovery**
+
+- it is a technique used to reduce the recovery time by periodically saving the state of the database in a checkpoint file
+
+- In the event of a failure, the system can use the checkpoint file to restore the database to the most recent consistent state before the failure occurred, rather than going through the entire log to recover the database.
+
+
+![Alt text](<Screenshot 2023-10-04 150250.png>)
+
+
+![Alt text](<Screenshot 2023-10-04 151547.png>)
+
+
+![v](<Screenshot 2023-10-04 151821.png>)
